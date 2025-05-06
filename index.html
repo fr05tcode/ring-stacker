@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ring Stacker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Ring Stacker</h1>
+  <p class="instruction">Move all the rings to the third tower in the fewest moves possible.</p>
+
+  <div id="game">
+    <div class="tower" id="tower1"></div>
+    <div class="tower" id="tower2"></div>
+    <div class="tower" id="tower3"></div>
+  </div>
+
+  <div class="status-placeholder"><p id="status"></p></div>
+
+  <div class="stats">
+    <p>Moves: <span id="moveCount">0</span> (Min: <span id="minMoves">7</span>)</p>
+    <p>Time: <span id="timer">0.0</span> sec</p>
+    <div class="restart-buttons">
+      <button id="resetBtn">⟳ Reset</button>
+      <button id="playAgainBtn">★ Play Again</button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="leaderboard">
+      <h3>Leaderboard (Fastest Wins)</h3>
+      <ul id="leaderboard"></ul>
+    </div>
+    <div class="controls">
+      <label class="inline-label">Ring Count:
+        <select id="diskCount">
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </label>
+      <label class="inline-label">Dark Mode:
+        <input type="checkbox" id="modeToggle" checked />
+      </label>
+    </div>
+  </div>
+
+  <audio id="winSound" preload="auto">
+    <source src="cheer.mp3" type="audio/mp3" />
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
