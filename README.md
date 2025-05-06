@@ -26,7 +26,7 @@ Includes:
 
 ## 📦 Version
 
-**v1.1** – Ring colors now remain fixed on completion (no unwanted changes)
+**v1.1** – Final
 
 ## 🛠️ Tech
 
