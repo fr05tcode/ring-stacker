@@ -10,6 +10,7 @@ const modeToggle = document.getElementById('modeToggle');
 const leaderboardList = document.getElementById('leaderboard');
 const winSound = document.getElementById('winSound');
 const status = document.getElementById('status');
+const API_URL = "https://ring-stacker-leaderboard-production.up.railway.app";
 
 let moveCount = 0;
 let timer = 0;
@@ -74,30 +75,36 @@ function stopTimer() {
   clearInterval(timerInterval);
 }
 
-function updateLeaderboard() {
-  const key = `hanoi-leaderboard-${numDisks}`;
-  const current = JSON.parse(localStorage.getItem(key)) || [];
-  current.push({ time: parseFloat(timer.toFixed(1)), moves: moveCount });
-  current.sort((a, b) => a.time - b.time);
-  const top5 = current.slice(0, 5);
-  localStorage.setItem(key, JSON.stringify(top5));
-  renderLeaderboard(top5);
+async function submitScore(entry) {
+  await fetch(`${API_URL}/leaderboard`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry)
+  });
+}
+
+async function loadLeaderboard() {
+  const res = await fetch(`${API_URL}/leaderboard`);
+  const data = await res.json();
+  renderLeaderboard(data);
 }
 
 function renderLeaderboard(entries) {
-  leaderboardList.innerHTML = '';
+  leaderboardList.innerHTML = "";
   entries.forEach((entry, i) => {
-    const li = document.createElement('li');
-    li.textContent = `#${i + 1}: ${entry.time.toFixed(1)}s, ${entry.moves} moves`;
+    const li = document.createElement("li");
+    li.textContent = `#${i + 1}: ${entry.name || "Player"} – ${entry.time.toFixed(1)}s, ${entry.moves} moves`;
     leaderboardList.appendChild(li);
   });
 }
+
 
 function checkWin() {
   const tower3 = document.getElementById('tower3');
   if (tower3.childElementCount === numDisks) {
     stopTimer();
-    updateLeaderboard();
+    submitScore({ name: "Player", time: timer, moves: moveCount });
+    loadLeaderboard();
     launchConfetti();
     winSound.play();
     status.textContent = `🎉 You won in ${moveCount} moves! Time: ${timer.toFixed(1)}s`;
@@ -164,4 +171,5 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('light-mode');
   }
   setupGame();
+  loadLeaderboard();
 });
